@@ -1,0 +1,8 @@
+PASS: same application package and signing certificate as original 1.2.0; increased versionCode.
+Package: com.weiji.privatejournal
+Original: 1.2.0 (versionCode 3)
+Current: 1.2.1 (versionCode 8)
+Certificate SHA-256: 3e546e105d27eff11a8177f3f99e4d219d7c536e855234eb4d8c7c7df6ff4fb4
+APK SHA-256: 284584670dc15385e0eb1c17ce9f413fab8a111a8c3d1513d26274607b7da5d6
+The signing identity and version requirements for updating the original app are satisfied.
+No physical Android device or emulator was connected; actual installation and hardware haptics remain untested.

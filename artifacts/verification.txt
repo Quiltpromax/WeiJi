@@ -1,0 +1,4 @@
+PASS: 13 core statistics/time/validation and unified record tests.
+PASS: Browser UI: required activity and optional viewing, post-save viewing addition, unified editing/cards, multiple viewing contents, removing viewing without deleting activity, cascading deletion, binding-preserving backup restore, old-data completion, prominent elapsed days, tags/statistics, images, corrupt backup rejection, PIN lock, timer, 320px layout and Android adapter; appearance modes/persistence, fixed header, navigation order, rapid animation cancellation, reduced motion, native theme and haptic bridges.
+APK: verified separately with apksigner and zipalign.
+No physical Android device was attached during these checks.

@@ -1,0 +1,25 @@
+.tools/
+build/
+node_modules/
+local.properties
+*.keystore
+*.jks
+*.p12
+__pycache__/
+artifacts/test-*.json
+**/password.txt
+**/signing-password.txt
+*.pem
+*.key
+.env
+.env.*
+
+# Publish source, APKs and previews; keep generated archives and local logs private.
+/artifacts/*
+!/artifacts/*.apk
+!/artifacts/*.png
+!/artifacts/*.html
+!/artifacts/*.md
+!/artifacts/SHA256.txt
+!/artifacts/verification.txt
+!/artifacts/update-compatibility.txt

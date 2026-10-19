@@ -1,0 +1,16 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.weiji.privatejournal'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.weiji.privatejournal'
+        minSdk 26
+        targetSdk 34
+        versionCode 8
+        versionName '1.2.1'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

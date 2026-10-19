@@ -1,0 +1,13 @@
+{
+  "name": "weiji-private-journal",
+  "version": "1.2.1",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/core.test.cjs",
+    "test:ui": "node tests/ui.test.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.11",
+    "playwright": "1.56.1"
+  }
+}
