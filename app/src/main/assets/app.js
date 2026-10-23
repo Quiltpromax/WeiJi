@@ -7,7 +7,6 @@
   const esc = (v) => String(v != null ? v : "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const icon = (name, cls = "") => '<svg class="icon '.concat(cls, '" aria-hidden="true"><use href="#i-').concat(name, '"/></svg>');
   const today = () => J.localDate();
-  let settingsOpen = false;
   let pageTransition = null;
   const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
   let state = J.blank(), page = "home", weekOffset = 0, recordType = "all", search = "", recordFilter = null;
@@ -155,13 +154,10 @@
   }
   function syncNavigation() {
     document.querySelectorAll("[data-page]").forEach((button) => {
-      const active = !settingsOpen && button.dataset.page === page;
+      const active = button.dataset.page === page;
       button.classList.toggle("active", active);
       button.setAttribute("aria-current", active ? "page" : "false");
     });
-    const settingsButton = $(".nav-settings");
-    settingsButton.classList.toggle("active", settingsOpen);
-    settingsButton.setAttribute("aria-expanded", String(settingsOpen));
     syncSelection();
   }
   function render() {
@@ -169,6 +165,7 @@
     syncNavigation();
     if (page === "home") renderHome();
     else if (page === "records") renderRecords();
+    else if (page === "settings") renderSettings();
     else renderStats();
     updateTimerBadge();
   }
@@ -211,7 +208,7 @@
     render();
     window.scrollTo(0, 0);
     if (!layer) return;
-    const order = { home:0, records:1, stats:2 };
+    const order = { home:0, records:1, stats:2, settings:3 };
     const direction = order[next] > order[previous] ? 1 : -1;
     try {
       const outgoing = snapshot.animate([
@@ -263,7 +260,6 @@
     modalOnClose = null;
     $("#modal-root").innerHTML = "";
     document.body.style.overflow = "";
-    settingsOpen = false;
     syncNavigation();
     if (close) close();
   }
@@ -524,8 +520,28 @@
       ).join('') + '</div><p class="appearance-note">跟随系统：与手机的深色模式同步切换。<br>选择浅色或深色后，会记住你的选择。</p><button class="secondary-button full-width" data-action="settings">返回设置</button>');
   }
   function settings() {
-    settingsOpen = true;
-    sheet("你的私人空间", '<div class="settings-group"><button class="settings-row" data-action="appearance">' + icon("moon") + '<span><strong>外观与深色模式</strong><small>' + window.WeijiTheme.getLabel() + ' · 夜间使用更舒适</small></span>' + icon("chevron") + '</button></div><div class="settings-group"><button class="settings-row" data-action="manage-tags">'.concat(icon("tag"), "<span><strong>管理标签</strong><small>为你的喜好起一个名字</small></span>").concat(icon("chevron"), '</button><button class="settings-row" data-action="pin-settings">').concat(icon("lock"), "<span><strong>").concat(hasPin() ? "修改或关闭密码锁" : "设置密码锁", "</strong><small>打开应用时输入 4–8 位数字</small></span>").concat(icon("chevron"), '</button></div><div class="settings-group"><button class="settings-row" data-action="export">').concat(icon("download"), "<span><strong>导出备份</strong><small>保存一个 .json 文件，含记录、标签和截图</small></span>").concat(icon("chevron"), '</button><button class="settings-row" data-action="import">').concat(icon("upload"), "<span><strong>恢复备份</strong><small>选择之前从微记导出的 .json 文件</small></span>").concat(icon("chevron"), '</button><div class="backup-explainer"><strong>备份是什么？</strong><br>一个 .json 文件，里面已包含全部记录、标签和截图。把文件留在手机，或传到新手机，再用「恢复备份」选择这个文件。<br>恢复会替换当前记录；密码锁设置不包含在备份里。</div></div><div class="settings-group"><button class="settings-row" data-action="help">').concat(icon("list"), "<span><strong>使用与统计说明</strong><small>间隔天数、计数、图片与备份步骤</small></span>").concat(icon("chevron"), '</button></div><div class="setting-description">微记 1.2.1 · 个人记录<br>数据保存在本机，应用不需要网络权限。<br>备份为普通文件，请存放在你自己的位置。</div>'));
+    closeModal();
+    if (page === "settings") render();
+    else navigate("settings");
+  }
+  function renderSettings() {
+    const row = (action, symbol, title, description) =>
+      '<button class="settings-row" data-action="' + action + '">' + icon(symbol) +
+      '<span><strong>' + esc(title) + '</strong><small>' + esc(description) + '</small></span>' + icon("chevron") + '</button>';
+    $("#main").innerHTML = '<div class="settings-page">' +
+      '<div class="page-intro"><div class="eyebrow">YOUR PRIVATE SPACE</div><h1 class="page-heading">你的私人空间</h1><p class="subtitle">外观、习惯与记录，都按你的心意。</p></div>' +
+      '<section class="settings-section" aria-labelledby="settings-preferences"><div class="section-head"><h2 id="settings-preferences">使用偏好</h2><small>让微记更合心意</small></div><div class="card settings-group">' +
+      row("appearance", "moon", "外观与深色模式", window.WeijiTheme.getLabel() + " · 夜间使用更舒适") +
+      row("manage-tags", "tag", "管理标签", "为你的喜好起一个名字") + '</div></section>' +
+      '<section class="settings-section" aria-labelledby="settings-privacy"><div class="section-head"><h2 id="settings-privacy">隐私与备份</h2><small>安心保管你的记录</small></div><div class="card settings-group">' +
+      row("pin-settings", "lock", hasPin() ? "修改或关闭密码锁" : "设置密码锁", "打开应用时输入 4–8 位数字") +
+      row("export", "download", "导出备份", "保存 .json 文件，含记录、标签和截图") +
+      row("import", "upload", "恢复备份", "选择之前从微记导出的 .json 文件") +
+      '<div class="backup-explainer"><strong>备份是什么？</strong><br>一个 .json 文件，已包含全部记录、标签和截图。留在手机或传到新手机，再用「恢复备份」选择该文件。<br>恢复会替换当前记录；密码锁设置不包含在备份里。</div></div></section>' +
+      '<section class="settings-section" aria-labelledby="settings-about"><div class="section-head"><h2 id="settings-about">关于微记</h2><small>慢慢记录，随时了解</small></div><div class="card settings-group">' +
+      row("help", "list", "使用与统计说明", "间隔天数、计数、图片与备份步骤") + '</div></section>' +
+      '<p class="privacy-footer">' + icon("lock") + '仅保存在本机 · 这是属于你的空间</p>' +
+      '<p class="setting-description">微记 1.2.1 · 个人记录<br>数据保存在本机，应用不需要网络权限。<br>备份为普通文件，请存放在你自己的位置。</p></div>';
   }
   async function hashPin(pin, salt) {
     const bytes = new TextEncoder().encode(salt + ":" + pin);
@@ -750,7 +766,10 @@
         appearance();
         break;
       case "set-appearance":
-        if (window.WeijiTheme.setMode(value)) appearance();
+        if (window.WeijiTheme.setMode(value)) {
+          if (page === "settings") renderSettings();
+          appearance();
+        }
         else toast("外观设置保存失败，请重试。");
         break;
       case "settings":

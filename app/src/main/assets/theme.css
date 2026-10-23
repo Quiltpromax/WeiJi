@@ -218,6 +218,15 @@ body {
 .settings-row>.icon:first-child { width:31px; height:31px; padding:6px; border-radius:10px; background:var(--green-light); color:var(--green); }
 .settings-row>.icon:last-child { width:15px; height:15px; color:var(--muted); }
 .settings-row>span { min-width:0; }
+.settings-section { margin-bottom:23px; }
+.settings-section .section-head { margin-bottom:12px; }
+.settings-page .settings-group { margin:0; padding:1px 16px; border-radius:var(--radius); background:var(--card); border-color:var(--line); box-shadow:0 4px 22px #1e382506; }
+.settings-page .settings-row { min-height:76px; }
+.settings-page .settings-row strong { font-size:14px; font-weight:600; }
+.settings-page .settings-row small { line-height:1.7; overflow-wrap:break-word; }
+.settings-page .backup-explainer { color:var(--muted); padding:14px 0 16px; }
+.settings-page .backup-explainer strong { color:var(--ink); font-weight:600; }
+.settings-page .setting-description { color:var(--muted); margin:9px 0 0; }
 .sheet { border-radius:30px 30px 0 0; padding:11px 22px 30px; padding-bottom:max(30px,env(safe-area-inset-bottom)); }
 .sheet-heading { margin-bottom:23px; }
 .sheet-heading h2 { font-size:23px; letter-spacing:-.5px; font-weight:700; }
